@@ -1,10 +1,12 @@
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
-    <AppBar 
-      position="static" 
-      sx={{ 
+    <AppBar
+      position="static"
+      sx={{
         width: '100%',
         left: 0,
         right: 0,
@@ -15,7 +17,7 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
           Planventure
         </Typography>
-        <Button color="inherit">Login</Button>
+        <Button color="inherit" onClick={() => navigate('/login')}>Login</Button>
       </Toolbar>
     </AppBar>
   );
