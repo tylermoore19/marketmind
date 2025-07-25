@@ -44,15 +44,21 @@ const LoginForm = ({ onSubmit }) => {
                 mx: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 2,
+                gap: 1, // reduced gap from 2 to 1
                 boxShadow: 3,
                 borderRadius: 2,
                 p: 4,
                 bgcolor: 'background.paper',
+                // Prevent Chrome autofill from graying out fields
+                '& input:-webkit-autofill': {
+                    WebkitBoxShadow: '0 0 0 1000px #fff inset',
+                    boxShadow: '0 0 0 1000px #fff inset',
+                    WebkitTextFillColor: '#222', // set to dark text for visibility
+                },
             }}
         >
-            <Box sx={{ mb: 2 }}>
-                <Box component="h2" sx={{ textAlign: 'center', fontWeight: 600, fontSize: 24, mb: 2 }}>
+            <Box sx={{ mb: 1 }}>
+                <Box component="h2" sx={{ textAlign: 'center', fontWeight: 600, fontSize: 24, mb: 1 }}>
                     Login to Your Account
                 </Box>
             </Box>
@@ -65,9 +71,9 @@ const LoginForm = ({ onSubmit }) => {
                 error={!!errors.email}
                 helperText={errors.email}
                 fullWidth
-                margin="normal"
+                margin="dense" // changed from "normal" to "dense"
                 autoComplete="email"
-                sx={{ mb: 1 }} // smaller gap below email
+                sx={{ mb: 0.5 }} // smaller gap below email
             />
             <TextField
                 id="password"
@@ -78,7 +84,7 @@ const LoginForm = ({ onSubmit }) => {
                 error={!!errors.password}
                 helperText={errors.password}
                 fullWidth
-                margin="normal"
+                margin="dense" // changed from "normal" to "dense"
                 autoComplete="current-password"
                 InputProps={{
                     endAdornment: (
@@ -94,12 +100,12 @@ const LoginForm = ({ onSubmit }) => {
                     ),
                 }}
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
                 Login
             </Button>
-            <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Box sx={{ mt: 1, textAlign: 'center' }}>
                 <Typography variant="body2">
-                    Don&#39;t have an account?{' '}
+                    Don&apos;t have an account?{' '}
                     <Button variant="text" size="small" onClick={() => navigate('/signup')} sx={{ textTransform: 'none', p: 0, minWidth: 0 }}>
                         Sign up
                     </Button>

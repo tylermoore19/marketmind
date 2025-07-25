@@ -24,9 +24,12 @@ const MainLayout = ({ children }) => {
           justifyContent: 'center',
           width: '100%',
           py: 3,
-          px: { xs: 2, sm: 3, md: 4 }, // Responsive padding
-          mt: 8,
-          mb: 10
+          px: { xs: 2, sm: 3, md: 4 },
+          mt: 8, // height of navbar (64px = 8 * 8px)
+          mb: 10,
+          minHeight: 'calc(100vh - 64px - 80px)', // 64px navbar, 80px footer
+          maxHeight: 'calc(100vh - 64px - 80px)',
+          overflow: 'hidden',
         }}
       >
         {children}

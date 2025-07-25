@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const navButtonSx = (withBorder = false) => ({
+    color: 'inherit',
+    border: withBorder ? '1.5px solid #fff' : 'none',
+    ml: withBorder ? 1 : 0,
+    '&:focus': { border: withBorder ? '1.5px solid #fff' : 'none', outline: 'none' },
+    '&:focus-visible': { border: withBorder ? '1.5px solid #fff' : 'none', outline: 'none' },
+  });
   return (
     <AppBar
       position="static"
@@ -15,9 +22,10 @@ const Navbar = () => {
     >
       <Toolbar sx={{ width: '100%' }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
-          Planventure
+          MarketMind
         </Typography>
-        <Button color="inherit" onClick={() => navigate('/login')}>Login</Button>
+        <Button onClick={() => navigate('/login')} sx={navButtonSx(false)}>Login</Button>
+        <Button onClick={() => navigate('/signup')} sx={navButtonSx(true)}>Sign Up</Button>
       </Toolbar>
     </AppBar>
   );
