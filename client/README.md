@@ -18,7 +18,7 @@ PlanVenture client is a modern web application that provides an interactive inte
 1. Fork and Clone the repository
 2. Navigate to the client directory:
     ```bash
-    cd planventure-client
+    cd client
     ```
 3. Install dependencies:
     ```bash

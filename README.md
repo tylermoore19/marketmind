@@ -25,7 +25,7 @@ If you prefer to develop locally, follow the steps below:
 
 1. Clone the repository and navigate to the [planventue-api](/planventure-api/) directory:
 ```sh
-cd planventure-api
+cd api
 ```
 
 2. Create a virtual environment and activate it:
