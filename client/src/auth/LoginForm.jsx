@@ -1,14 +1,21 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Button, Box, InputAdornment, IconButton, Typography } from '@mui/material';
+import { TextField, Button, Box, InputAdornment, IconButton, Typography, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
+
+// TODO : also, add in Alert to app level so when you login or sign up, and it will navigate to next page, it will show success message
 
 const LoginForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState('');
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const validate = () => {
@@ -27,10 +34,24 @@ const LoginForm = ({ onSubmit }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setAlert('');
         if (validate()) {
-            onSubmit && onSubmit({ email, password });
+            setLoading(true);
+            try {
+                const data = await api.login(email, password);
+
+                if (data.token) {
+                    login(data.token); // Save token in context
+                    onSubmit && onSubmit({ email, password, token: data.token });
+                    navigate('/dashboard'); // redirect on success
+                }
+            } catch (err) {
+                setAlert(err.message || 'Login failed. Please try again.');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -44,16 +65,15 @@ const LoginForm = ({ onSubmit }) => {
                 mx: 'auto',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 1, // reduced gap from 2 to 1
+                gap: 1,
                 boxShadow: 3,
                 borderRadius: 2,
                 p: 4,
                 bgcolor: 'background.paper',
-                // Prevent Chrome autofill from graying out fields
                 '& input:-webkit-autofill': {
                     WebkitBoxShadow: '0 0 0 1000px #fff inset',
                     boxShadow: '0 0 0 1000px #fff inset',
-                    WebkitTextFillColor: '#222', // set to dark text for visibility
+                    WebkitTextFillColor: '#222',
                 },
             }}
         >
@@ -62,6 +82,11 @@ const LoginForm = ({ onSubmit }) => {
                     Login to Your Account
                 </Box>
             </Box>
+            {alert && (
+                <Alert severity="error" sx={{ mb: 2 }}>
+                    {alert}
+                </Alert>
+            )}
             <TextField
                 id="email"
                 label="Email"
@@ -71,9 +96,9 @@ const LoginForm = ({ onSubmit }) => {
                 error={!!errors.email}
                 helperText={errors.email}
                 fullWidth
-                margin="dense" // changed from "normal" to "dense"
+                margin="dense"
                 autoComplete="email"
-                sx={{ mb: 0.5 }} // smaller gap below email
+                sx={{ mb: 0.5 }}
             />
             <TextField
                 id="password"
@@ -84,7 +109,7 @@ const LoginForm = ({ onSubmit }) => {
                 error={!!errors.password}
                 helperText={errors.password}
                 fullWidth
-                margin="dense" // changed from "normal" to "dense"
+                margin="dense"
                 autoComplete="current-password"
                 InputProps={{
                     endAdornment: (
@@ -100,8 +125,8 @@ const LoginForm = ({ onSubmit }) => {
                     ),
                 }}
             />
-            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
-                Login
+            <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }} disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
             </Button>
             <Box sx={{ mt: 1, textAlign: 'center' }}>
                 <Typography variant="body2">

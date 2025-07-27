@@ -1,5 +1,5 @@
 from flask import Flask, jsonify
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from os import environ
@@ -16,15 +16,6 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     
-    # Configure CORS
-    CORS(app, 
-         resources={r"/*": {
-             "origins": Config.CORS_ORIGINS,
-             "methods": Config.CORS_METHODS,
-             "allow_headers": Config.CORS_HEADERS,
-             "supports_credentials": Config.CORS_SUPPORTS_CREDENTIALS
-         }})
-
     # JWT Configuration
     app.config['JWT_SECRET_KEY'] = environ.get('JWT_SECRET_KEY', 'your-secret-key')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
@@ -72,6 +63,15 @@ def create_app():
     @app.route('/health')
     def health_check():
         return jsonify({"status": "healthy"})
+    
+    # Configure CORS
+    CORS(app, 
+         resources={r"/*": {
+             "origins": Config.CORS_ORIGINS,
+             "methods": Config.CORS_METHODS,
+             "allow_headers": Config.CORS_HEADERS,
+             "supports_credentials": Config.CORS_SUPPORTS_CREDENTIALS
+         }})
 
     return app
 

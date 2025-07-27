@@ -6,10 +6,10 @@ from utils.validators import validate_email
 auth_bp = Blueprint('auth', __name__)
 
 # Error responses
-INVALID_CREDENTIALS = {"error": "Invalid email or password"}, 401
-MISSING_FIELDS = {"error": "Missing required fields"}, 400
-INVALID_EMAIL = {"error": "Invalid email format"}, 400
-EMAIL_EXISTS = {"error": "Email already registered"}, 409
+INVALID_CREDENTIALS = {"error": "Invalid email or password"}
+MISSING_FIELDS = {"error": "Missing required fields"}
+INVALID_EMAIL = {"error": "Invalid email format"}
+EMAIL_EXISTS = {"error": "Email already registered"}
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -17,15 +17,15 @@ def register():
     
     # Validate required fields
     if not all(k in data for k in ['email', 'password']):
-        return jsonify(MISSING_FIELDS)
+        return jsonify(MISSING_FIELDS), 400
     
     # Validate email format
     if not validate_email(data['email']):
-        return jsonify(INVALID_EMAIL)
+        return jsonify(INVALID_EMAIL), 400
     
     # Check if user already exists
     if User.query.filter_by(email=data['email']).first():
-        return jsonify(EMAIL_EXISTS)
+        return jsonify(EMAIL_EXISTS), 409
     
     # Create new user
     try:
@@ -50,7 +50,7 @@ def login():
     
     # Validate required fields
     if not all(k in data for k in ['email', 'password']):
-        return jsonify(MISSING_FIELDS)
+        return jsonify(MISSING_FIELDS), 400
     
     # Find user by email
     user = User.query.filter_by(email=data['email']).first()
@@ -67,4 +67,5 @@ def login():
             }
         }), 200
     
-    return jsonify(INVALID_CREDENTIALS)
+    # Always return 401 Unauthorized for invalid credentials
+    return jsonify(INVALID_CREDENTIALS), 401

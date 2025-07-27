@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { TextField, Button, Box, InputAdornment, IconButton, Typography } from '@mui/material';
+import { TextField, Button, Box, InputAdornment, IconButton, Typography, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import api from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
 const SignUpForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('');
@@ -11,6 +13,9 @@ const SignUpForm = ({ onSubmit }) => {
     const [errors, setErrors] = useState({});
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [alert, setAlert] = useState('');
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const validate = () => {
@@ -34,10 +39,24 @@ const SignUpForm = ({ onSubmit }) => {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        setAlert('');
         if (validate()) {
-            onSubmit && onSubmit({ email, password });
+            setLoading(true);
+            try {
+                const data = await api.register(email, password);
+
+                if (data.token) {
+                    login(data.token); // Save token in context
+                    onSubmit && onSubmit({ email, password, token: data.token });
+                    navigate('/dashboard'); // redirect on success
+                }
+            } catch (err) {
+                setAlert(err.message || 'Registration failed. Please try again.');
+            } finally {
+                setLoading(false);
+            }
         }
     };
 
@@ -78,6 +97,11 @@ const SignUpForm = ({ onSubmit }) => {
                         Create an Account
                     </Box>
                 </Box>
+                {alert && (
+                    <Alert severity="error" sx={{ mb: 2 }}>
+                        {alert}
+                    </Alert>
+                )}
                 <TextField
                     id="email"
                     label="Email"
@@ -141,8 +165,8 @@ const SignUpForm = ({ onSubmit }) => {
                         ),
                     }}
                 />
-                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }}>
-                    Sign Up
+                <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }} disabled={loading}>
+                    {loading ? 'Signing up...' : 'Sign Up'}
                 </Button>
                 <Box sx={{ mt: 1, textAlign: 'center' }}>
                     <Typography variant="body2">

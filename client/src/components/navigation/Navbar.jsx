@@ -1,8 +1,10 @@
 import { AppBar, Toolbar, Typography, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, logout } = useAuth();
   const navButtonSx = (withBorder = false) => ({
     color: 'inherit',
     border: withBorder ? '1.5px solid #fff' : 'none',
@@ -24,8 +26,16 @@ const Navbar = () => {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
           MarketMind
         </Typography>
-        <Button onClick={() => navigate('/login')} sx={navButtonSx(false)}>Login</Button>
-        <Button onClick={() => navigate('/signup')} sx={navButtonSx(true)}>Sign Up</Button>
+        {isAuthenticated ? (
+          <Button onClick={logout} sx={navButtonSx(true)}>
+            Sign Out
+          </Button>
+        ) : (
+          <>
+            <Button onClick={() => navigate('/login')} sx={navButtonSx(false)}>Login</Button>
+            <Button onClick={() => navigate('/signup')} sx={navButtonSx(true)}>Sign Up</Button>
+          </>
+        )}
       </Toolbar>
     </AppBar>
   );
