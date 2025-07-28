@@ -1,9 +1,13 @@
 import { Box, Container } from '@mui/material';
+import { useAlert } from '../context/AlertContext';
+import { Alert } from '@mui/material';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../components/navigation/Footer';
 import PropTypes from 'prop-types';
 
 const MainLayout = ({ children }) => {
+  const { alert, hideAlert } = useAlert();
+
   return (
     <Box sx={{
       display: 'flex',
@@ -13,6 +17,34 @@ const MainLayout = ({ children }) => {
       position: 'relative'
     }}>
       <Navbar />
+      {alert && (
+        <Box sx={{ position: 'fixed', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+          <Alert
+            severity={alert.severity}
+            sx={{ width: 'fit-content', minWidth: 600, maxWidth: 720, px: 3, py: 1.5, borderRadius: 2, boxShadow: 3, pointerEvents: 'auto', alignItems: 'center' }}
+            action={
+              <Box sx={{ ml: 2 }}>
+                <span
+                  style={{
+                    cursor: 'pointer',
+                    fontWeight: 700,
+                    fontSize: 20,
+                    color: '#888',
+                    lineHeight: 1,
+                  }}
+                  onClick={hideAlert}
+                  aria-label="Close alert"
+                  role="button"
+                >
+                  ×
+                </span>
+              </Box>
+            }
+          >
+            {alert.message}
+          </Alert>
+        </Box>
+      )}
       <Container
         component="main"
         maxWidth="lg"

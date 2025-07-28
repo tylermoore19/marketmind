@@ -5,6 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useAlert } from '../context/AlertContext';
 
 const SignUpForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const SignUpForm = ({ onSubmit }) => {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState('');
     const { login } = useAuth();
+    const { showAlert } = useAlert();
     const navigate = useNavigate();
 
     const validate = () => {
@@ -50,6 +52,7 @@ const SignUpForm = ({ onSubmit }) => {
                 if (data.token) {
                     login(data.token); // Save token in context
                     onSubmit && onSubmit({ email, password, token: data.token });
+                    showAlert('Sign up successful', 'success');
                     navigate('/dashboard'); // redirect on success
                 }
             } catch (err) {

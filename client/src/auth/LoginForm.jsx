@@ -5,6 +5,7 @@ import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useAlert } from '../context/AlertContext';
 
 // TODO : also, add in Alert to app level so when you login or sign up, and it will navigate to next page, it will show success message
 
@@ -16,6 +17,8 @@ const LoginForm = ({ onSubmit }) => {
     const [loading, setLoading] = useState(false);
     const [alert, setAlert] = useState('');
     const { login } = useAuth();
+    const { showAlert } = useAlert();
+
     const navigate = useNavigate();
 
     const validate = () => {
@@ -45,6 +48,7 @@ const LoginForm = ({ onSubmit }) => {
                 if (data.token) {
                     login(data.token); // Save token in context
                     onSubmit && onSubmit({ email, password, token: data.token });
+                    showAlert('Login successful', 'success');
                     navigate('/dashboard'); // redirect on success
                 }
             } catch (err) {
