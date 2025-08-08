@@ -28,9 +28,28 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
   }, []);
 
+  // Inactivity logout effect
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const checkInactivity = () => {
+      const lastActivity = parseInt(localStorage.getItem('last_api_activity'), 10);
+      const now = Date.now();
+      // 1 hour = 3600000 ms
+      if (lastActivity && now - lastActivity > 3600000) {
+        logout();
+      }
+    };
+
+    // Check every minute
+    const interval = setInterval(checkInactivity, 60000);
+    return () => clearInterval(interval);
+  }, [isAuthenticated, logout]);
+
   const value = {
     isAuthenticated,
     token,
+    setToken,
     login,
     logout,
     setIsAuthenticated, // for legacy compatibility

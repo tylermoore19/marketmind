@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
+import { useApiCall } from '../hooks/useApiCall';
 
 const SignUpForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('');
@@ -19,6 +20,8 @@ const SignUpForm = ({ onSubmit }) => {
     const { login } = useAuth();
     const { showAlert } = useAlert();
     const navigate = useNavigate();
+
+    const apiRegister = useApiCall(api.register);
 
     const validate = () => {
         const newErrors = {};
@@ -47,7 +50,7 @@ const SignUpForm = ({ onSubmit }) => {
         if (validate()) {
             setLoading(true);
             try {
-                const data = await api.register(email, password);
+                const data = await apiRegister(email, password);
 
                 if (data.token) {
                     login(data.token); // Save token in context

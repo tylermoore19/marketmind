@@ -10,12 +10,17 @@ export class TokenExpiredError extends Error {
 }
 
 export function useApiCall(apiFunc) {
-    const { logout } = useAuth();
+    const { logout, setToken } = useAuth();
     const { showAlert } = useAlert();
 
     return async (...args) => {
         try {
-            return await apiFunc(...args);
+            // Expect apiFunc to return an object: { data, refreshToken }
+            const result = await apiFunc(...args);
+            if (result && result.refreshToken) {
+                setToken(result.refreshToken);
+            }
+            return result && result.data !== undefined ? result.data : result;
         } catch (err) {
             // if it's an authentication issue, log out the user. otherwise, rethrow the error and let the individual component handle it
             if (

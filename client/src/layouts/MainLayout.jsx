@@ -15,7 +15,7 @@ const MainLayout = ({ children }) => {
       display: 'flex',
       flexDirection: 'column',
       minHeight: '100vh',
-      width: '100%',
+      width: '100vw',
       position: 'relative'
     }}>
       <Navbar />
@@ -52,14 +52,13 @@ const MainLayout = ({ children }) => {
       </Box>
       <Container
         component="main"
-        maxWidth="lg"
+        maxWidth={false}
         sx={{
           flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          width: '100%',
           py: 3,
           px: { xs: 2, sm: 3, md: 4 },
           mt: 8, // height of navbar (64px = 8 * 8px)

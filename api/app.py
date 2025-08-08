@@ -1,8 +1,8 @@
 from utils.helpers import create_error_response
 from flask import Flask, jsonify
-from flask_cors import CORS, cross_origin
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, get_jwt_identity, create_access_token
 from os import environ
 from dotenv import load_dotenv
 from datetime import timedelta
@@ -55,6 +55,20 @@ def create_app():
     @app.route('/health')
     def health_check():
         return jsonify({"status": "healthy"})
+
+    @app.after_request
+    def refresh_expiring_jwts(response):
+        """Refresh JWT tokens if they are about to expire."""
+        try:
+            # Only refresh if the user is authenticated
+            identity = get_jwt_identity()
+            if identity:
+                new_token = create_access_token(identity=identity)
+                # You can send the new token in a custom header:
+                response.headers['X-Refresh-Token'] = new_token
+        except Exception:
+            pass
+        return response
     
     # Configure CORS
     CORS(app, 
@@ -62,7 +76,8 @@ def create_app():
              "origins": Config.CORS_ORIGINS,
              "methods": Config.CORS_METHODS,
              "allow_headers": Config.CORS_HEADERS,
-             "supports_credentials": Config.CORS_SUPPORTS_CREDENTIALS
+             "supports_credentials": Config.CORS_SUPPORTS_CREDENTIALS,
+             "expose_headers": ["X-Refresh-Token"],
          }})
 
     return app
