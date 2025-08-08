@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/material';
+import { Box, Container, Fade } from '@mui/material';
 import { useAlert } from '../context/AlertContext';
 import { Alert } from '@mui/material';
 import Navbar from '../components/navigation/Navbar';
@@ -7,6 +7,8 @@ import PropTypes from 'prop-types';
 
 const MainLayout = ({ children }) => {
   const { alert, hideAlert } = useAlert();
+
+  // TODO : create Toast component that allows for multiple alerts, not just one
 
   return (
     <Box sx={{
@@ -17,13 +19,13 @@ const MainLayout = ({ children }) => {
       position: 'relative'
     }}>
       <Navbar />
-      {alert && (
-        <Box sx={{ position: 'fixed', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+      <Box sx={{ position: 'fixed', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+        <Fade in={!!alert} timeout={{ enter: 300, exit: 300 }} unmountOnExit>
           <Alert
-            severity={alert.severity}
+            severity={alert?.severity}
             sx={{ width: 'fit-content', minWidth: 600, maxWidth: 720, px: 3, py: 1.5, borderRadius: 2, boxShadow: 3, pointerEvents: 'auto', alignItems: 'center' }}
             action={
-              <Box sx={{ ml: 2 }}>
+              <Box sx={{ ml: 2, display: 'flex', alignItems: 'center', height: 'auto', pb: '4px' }}>
                 <span
                   style={{
                     cursor: 'pointer',
@@ -31,6 +33,9 @@ const MainLayout = ({ children }) => {
                     fontSize: 20,
                     color: '#888',
                     lineHeight: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    height: '100%',
                   }}
                   onClick={hideAlert}
                   aria-label="Close alert"
@@ -41,10 +46,10 @@ const MainLayout = ({ children }) => {
               </Box>
             }
           >
-            {alert.message}
+            {alert?.message}
           </Alert>
-        </Box>
-      )}
+        </Fade>
+      </Box>
       <Container
         component="main"
         maxWidth="lg"

@@ -2,14 +2,15 @@ from flask import Blueprint, request, jsonify
 from app import db
 from models import User
 from utils.validators import validate_email
+from utils.helpers import create_error_response
 
 auth_bp = Blueprint('auth', __name__)
 
 # Error responses
-INVALID_CREDENTIALS = {"error": "Invalid email or password"}
-MISSING_FIELDS = {"error": "Missing required fields"}
-INVALID_EMAIL = {"error": "Invalid email format"}
-EMAIL_EXISTS = {"error": "Email already registered"}
+INVALID_CREDENTIALS = create_error_response('Invalid email or password', 'invalid_credentials')
+MISSING_FIELDS = create_error_response('Missing required fields', 'missing_fields')
+INVALID_EMAIL = create_error_response('Invalid email format', 'invalid_email')
+EMAIL_EXISTS = create_error_response('Email already registered', 'email_exists')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -42,7 +43,7 @@ def register():
         }), 201
     except Exception as e:
         db.session.rollback()
-        return jsonify({'error': 'Registration failed'}), 500
+        return jsonify(create_error_response('Registration failed', 'registration')), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():

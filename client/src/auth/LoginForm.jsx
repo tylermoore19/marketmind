@@ -7,8 +7,6 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
 
-// TODO : also, add in Alert to app level so when you login or sign up, and it will navigate to next page, it will show success message
-
 const LoginForm = ({ onSubmit }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

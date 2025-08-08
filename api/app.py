@@ -1,3 +1,4 @@
+from utils.helpers import create_error_response
 from flask import Flask, jsonify
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
@@ -23,27 +24,18 @@ def create_app():
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_data):
-        return jsonify({
-            'error': 'Token has expired',
-            'code': 'token_expired'
-        }), 401
+        return jsonify(create_error_response('Token has expired', 'token_expired')), 401
 
     @jwt.invalid_token_loader
     def invalid_token_callback(error):
-        return jsonify({
-            'error': 'Invalid token',
-            'code': 'invalid_token'
-        }), 401
+        return jsonify(create_error_response('Invalid token', 'invalid_token')), 401
 
     @jwt.unauthorized_loader
     def missing_token_callback(error):
-        return jsonify({
-            'error': 'Authorization token is missing',
-            'code': 'authorization_required'
-        }), 401
+        return jsonify(create_error_response('Authorization token is missing', 'authorization_required')), 401
 
     # Database configuration
-    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL', 'sqlite:///planventure.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL', 'sqlite:///marketmind.db')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     # Initialize extensions
@@ -78,3 +70,6 @@ def create_app():
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
+    
+# TODO : create a new file that will take in a stock ticker, look up the fundamental data, use chatgpt to analyze it, and return the analysis
+# this with the technical analysis should be enough to make a decision on whether to buy or sell the stock
