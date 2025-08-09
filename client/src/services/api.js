@@ -62,6 +62,10 @@ export const api = {
   getTopStocks: async () => {
     return api.get('/stocks/top');
   },
+
+  getTestingStocks: async () => {
+    return api.get('/stocks/testing');
+  },
 };
 
 export default api;

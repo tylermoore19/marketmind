@@ -8,8 +8,8 @@ import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
-      <AlertProvider>
+    <AlertProvider>
+      <AuthProvider>
         <Router>
           <MainLayout>
             <Routes>
@@ -35,8 +35,8 @@ function App() {
             </Routes>
           </MainLayout>
         </Router>
-      </AlertProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </AlertProvider>
   );
 }
 

@@ -1,42 +1,23 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect } from "react";
-import { Toolbar, Typography, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import { useApiCall } from '../hooks/useApiCall';
-import { useAlert } from '../context/AlertContext';
 import api from '../services/api';
+import InfoCard from '../components/common/InfoCard';
+import FlexWrapLayout from '../layouts/FlexWrapLayout';
 
 const StocksPage = () => {
-    const [data, setData] = useState(null);
-    const callTopStocks = useApiCall(api.getTopStocks);
-    const { showAlert } = useAlert();
-
-    useEffect(() => {
-        const fetchStocks = async () => {
-            try {
-                const stocks = await callTopStocks();
-                setData(stocks);
-            } catch (error) {
-                showAlert(error.message, "error");
-            }
-        };
-
-        fetchStocks();
-    }, []);
+    const topStocksCard = useApiCall(api.getTopStocks);
+    const testingStocksCard = useApiCall(api.getTestingStocks);
 
     return (
-        <Box>
-            <Toolbar>
-                <Typography
-                    variant="h6"
-                    sx={{ flexGrow: 1, fontWeight: "bold", cursor: "pointer" }}
-                >
-                    Stocks
-                </Typography>
+        <FlexWrapLayout>
+            <InfoCard title="Top Stocks" loading={topStocksCard.loading} error={topStocksCard.error} refetch={topStocksCard.fetch}>
+                {topStocksCard.data && <pre>{JSON.stringify(topStocksCard.data, null, 2)}</pre>}
+            </InfoCard>
 
-                {/* Tabs on the right */}
-                {data && <pre>{JSON.stringify(data, null, 2)}</pre>}
-            </Toolbar>
-        </Box>
+            <InfoCard title="Testing Stocks" loading={testingStocksCard.loading} error={testingStocksCard.error} refetch={testingStocksCard.fetch}>
+                {testingStocksCard.data && <pre>{JSON.stringify(testingStocksCard.data, null, 2)}</pre>}
+            </InfoCard>
+        </FlexWrapLayout>
     )
 };
 

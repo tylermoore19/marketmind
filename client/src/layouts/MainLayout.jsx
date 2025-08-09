@@ -68,12 +68,13 @@ const MainLayout = ({ children }) => {
           sx={{
             flexGrow: 1,
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: { xs: 2, sm: 3, md: 4 },
             p: { xs: 2, sm: 3, md: 4 },
             height: 'calc(100vh - 64px)', // 64px navbar
-            overflow: 'hidden',
+            width: '100%',
+            overflow: 'auto',
           }}
         >
           {children}

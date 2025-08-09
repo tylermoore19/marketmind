@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
+import { useAlert } from '../context/AlertContext';
 
 const AuthContext = createContext(null);
 
@@ -8,6 +10,8 @@ const TOKEN_KEY = 'auth_token';
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem(TOKEN_KEY));
+
+  const { showAlert } = useAlert();
 
   // Save token to localStorage when it changes
   useEffect(() => {
@@ -38,6 +42,7 @@ export const AuthProvider = ({ children }) => {
       // 1 hour = 3600000 ms
       if (lastActivity && now - lastActivity > 3600000) {
         logout();
+        showAlert('You have been logged out due to inactivity.', 'warning');
       }
     };
 

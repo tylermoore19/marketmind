@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
 
@@ -9,18 +11,25 @@ export class TokenExpiredError extends Error {
     }
 }
 
-export function useApiCall(apiFunc) {
+export function useApiCall(apiFunc, skipInitial = false, args = [], deps = []) {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
     const { logout, setToken } = useAuth();
     const { showAlert } = useAlert();
 
-    return async (...args) => {
+    const fetchData = useCallback(async (...args) => {
+        setLoading(true);
+        setError(null);
+
         try {
             // Expect apiFunc to return an object: { data, refreshToken }
             const result = await apiFunc(...args);
             if (result && result.refreshToken) {
                 setToken(result.refreshToken);
             }
-            return result && result.data !== undefined ? result.data : result;
+            setData(result && result.data !== undefined ? result.data : result);
         } catch (err) {
             // if it's an authentication issue, log out the user. otherwise, rethrow the error and let the individual component handle it
             if (
@@ -31,11 +40,23 @@ export function useApiCall(apiFunc) {
                     err.code.includes('invalid_token')
                 ))
             ) {
-                logout();
-                showAlert('You have been signed out. Please log in again.', 'info');
+                showAlert('You have been signed out. You will be redirected to login page in 3 seconds...', 'error');
+                setTimeout(() => {
+                    logout();
+                }, 4000);
             } else {
-                throw err;
+                setError(err.message || 'An error occurred');
             }
+        } finally {
+            setLoading(false);
         }
-    };
+    }, deps);
+
+    useEffect(() => {
+        if (!skipInitial) {
+            fetchData(...args);
+        }
+    }, [fetchData, skipInitial, ...args]);
+
+    return { data, loading, error, fetch: fetchData };
 }
