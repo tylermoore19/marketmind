@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     setToken,
     login,
     logout,
-    setIsAuthenticated, // for legacy compatibility
+    setIsAuthenticated,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -1,19 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
+const darkGray = '#0f0f0f'; // dark gray
+const lightGray = '#f5f5f1'; // light gray
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#1e293b', // dark blue
-      light: '#334155',
-      dark: '#0f172a',
+      main: darkGray,
+      // light: '#334155',
+      // dark: '#0f172a',
     },
     secondary: {
-      main: '#64748b', // muted blue-gray
-      light: '#94a3b8',
-      dark: '#475569',
+      main: '#64748b', // muted blue-gray // TODO : need to change this to match theme
+      // light: '#94a3b8',
+      // dark: '#475569',
     },
     background: {
-      default: '#fff', // white background
+      default: lightGray,
       paper: '#fff',
     },
     success: {
@@ -29,9 +32,21 @@ const theme = createTheme({
       main: '#38bdf8', // blue
     },
     text: {
-      primary: '#1e293b', // dark blue text
-      secondary: '#64748b',
+      primary: darkGray,
+      secondary: lightGray,
     },
+    gradients: {
+      orange: 'linear-gradient(20deg, #FF5722 10%, #FF9800 50%)',
+    }
+  },
+  components: {
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          color: "gray",
+        },
+      },
+    }
   },
   typography: {
     fontFamily: '"Inter", "system-ui", "Avenir", "Helvetica", "Arial", sans-serif',

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import { TextField, Button, Box, InputAdornment, IconButton, Typography, Alert } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
@@ -19,6 +19,9 @@ const LoginForm = ({ onSubmit }) => {
     const { showAlert } = useAlert();
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || '/dashboard';
+
 
     const apiLogin = useApiCall(api.login);
 
@@ -50,7 +53,7 @@ const LoginForm = ({ onSubmit }) => {
                     login(data.token); // Save token in context
                     onSubmit && onSubmit({ email, password, token: data.token });
                     showAlert('Login successful', 'success');
-                    navigate('/dashboard'); // redirect on success
+                    navigate(from, { replace: true }); // redirect on success
                 }
             } catch (err) {
                 setAlert(err.message || 'Login failed. Please try again.');

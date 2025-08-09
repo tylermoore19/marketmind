@@ -1,11 +1,15 @@
-import { Box, Container, Fade } from '@mui/material';
+import { useState } from "react";
+import { Box, Container, Fade } from "@mui/material";
 import { useAlert } from '../context/AlertContext';
 import { Alert } from '@mui/material';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../components/navigation/Footer';
 import PropTypes from 'prop-types';
+import SideDrawer from '../components/navigation/SideDrawer';
 
 const MainLayout = ({ children }) => {
+  const [pageTitle, setPageTitle] = useState("");
+
   const { alert, hideAlert } = useAlert();
 
   // TODO : create Toast component that allows for multiple alerts, not just one
@@ -13,12 +17,11 @@ const MainLayout = ({ children }) => {
   return (
     <Box sx={{
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       minHeight: '100vh',
       width: '100vw',
       position: 'relative'
     }}>
-      <Navbar />
       <Box sx={{ position: 'fixed', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
         <Fade in={!!alert} timeout={{ enter: 300, exit: 300 }} unmountOnExit>
           <Alert
@@ -50,27 +53,31 @@ const MainLayout = ({ children }) => {
           </Alert>
         </Fade>
       </Box>
-      <Container
-        component="main"
-        maxWidth={false}
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          py: 3,
-          px: { xs: 2, sm: 3, md: 4 },
-          mt: 8, // height of navbar (64px = 8 * 8px)
-          mb: 10,
-          minHeight: 'calc(100vh - 64px - 80px)', // 64px navbar, 80px footer
-          maxHeight: 'calc(100vh - 64px - 80px)',
-          overflow: 'hidden',
-        }}
-      >
-        {children}
-      </Container>
-      <Footer />
+
+      <SideDrawer setPageTitle={setPageTitle} />
+
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+        <Navbar pageTitle={pageTitle} />
+
+        <Container
+          component="main"
+          maxWidth={false}
+          sx={{
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            px: { xs: 2, sm: 3, md: 4 },
+            minHeight: 'calc(100vh - 64px - 80px)', // 64px navbar, 80px footer
+            maxHeight: 'calc(100vh - 64px - 80px)',
+            overflow: 'hidden',
+          }}
+        >
+          {children}
+        </Container>
+      </Box>
+      {/* <Footer /> */}
     </Box>
   );
 };

@@ -1,44 +1,92 @@
-import { AppBar, Toolbar, Typography, Button } from '@mui/material';
+import { useState } from "react";
+import PropTypes from 'prop-types';
+import { AppBar, Toolbar, Typography, Menu, MenuItem, IconButton, Box } from '@mui/material';
+import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const Navbar = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated, logout } = useAuth();
-  const navButtonSx = (withBorder = false) => ({
-    color: 'inherit',
-    border: withBorder ? '1.5px solid #fff' : 'none',
-    ml: withBorder ? 1 : 0,
-    '&:focus': { border: withBorder ? '1.5px solid #fff' : 'none', outline: 'none' },
-    '&:focus-visible': { border: withBorder ? '1.5px solid #fff' : 'none', outline: 'none' },
-  });
-  return (
-    <AppBar
-      position="static"
-      sx={{
-        width: '100%',
-        left: 0,
-        right: 0,
-        position: 'fixed',
-      }}
-    >
-      <Toolbar sx={{ width: '100%' }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'left' }}>
-          MarketMind
-        </Typography>
-        {isAuthenticated ? (
-          <Button onClick={logout} sx={navButtonSx(true)}>
-            Sign Out
-          </Button>
-        ) : (
-          <>
-            <Button onClick={() => navigate('/login')} sx={navButtonSx(false)}>Login</Button>
-            <Button onClick={() => navigate('/signup')} sx={navButtonSx(true)}>Sign Up</Button>
-          </>
-        )}
-      </Toolbar>
-    </AppBar>
-  );
+const Navbar = ({ pageTitle }) => {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const navigate = useNavigate();
+    const { isAuthenticated, logout } = useAuth();
+
+    const handleMenuOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+    return (
+        <AppBar position='sticky' sx={{ left: 'auto', right: 'auto', width: '100%', bgcolor: 'background.paper', color: 'text.primary' }}>
+            <Toolbar>
+                <Typography variant="h6" noWrap component="div">
+                    {pageTitle}
+                </Typography>
+
+                <Box sx={{ flexGrow: 1 }} /> {/* Pushes icon to right */}
+
+                <IconButton
+                    size="large"
+                    edge="end"
+                    color="inherit"
+                    onClick={handleMenuOpen}
+                >
+                    <AccountCircle />
+                </IconButton>
+
+                <Menu
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={handleMenuClose}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right",
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right",
+                    }}
+                >
+                    {!isAuthenticated ? (
+                        <>
+                            <MenuItem
+                                onClick={() => {
+                                    handleMenuClose();
+                                    navigate("/login");
+                                }}
+                            >
+                                Login
+                            </MenuItem>
+                            <MenuItem
+                                onClick={() => {
+                                    handleMenuClose();
+                                    navigate("/signup");
+                                }}
+                            >
+                                Sign Up
+                            </MenuItem>
+                        </>
+                    ) : (
+                        <MenuItem
+                            onClick={() => {
+                                handleMenuClose();
+                                logout();
+                            }}
+                        >
+                            Logout
+                        </MenuItem>
+                    )}
+                </Menu>
+            </Toolbar>
+        </AppBar>
+    );
+};
+
+Navbar.propTypes = {
+    pageTitle: PropTypes.string,
 };
 
 export default Navbar;

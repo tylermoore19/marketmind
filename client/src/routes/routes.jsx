@@ -24,6 +24,14 @@ export const protectedRoutes = [
     element: <DashboardPage />,
   },
   {
+    path: '/stocks',
+    element: <div>Stocks Page</div>,
+  },
+  {
+    path: '/sports',
+    element: <div>Sports Page</div>,
+  },
+  {
     path: '/trips',
     element: <Home />, // Temporarily using Home component
   }

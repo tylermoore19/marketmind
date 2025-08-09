@@ -12,7 +12,7 @@ const Footer = () => {
         bottom: 0,
         left: 0,
         right: 0,
-        backgroundColor: (theme) => theme.palette.grey[100],
+        backgroundColor: 'background.paper',
         zIndex: 1000
       }}
     >
@@ -23,11 +23,11 @@ const Footer = () => {
           justifyContent="space-between"
           alignItems="center"
         >
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2">
             © {new Date().getFullYear()} Marketmind.
           </Typography>
           <Stack direction="row" spacing={3}>
-            <Link href="https://gh.io/gfb-copilot" alt="GitHub Copilot" target="_blank" color="text.secondary" underline="hover">
+            <Link href="https://gh.io/gfb-copilot" alt="GitHub Copilot" target="_blank" underline="hover">
               Built with GitHub Copilot 🤖
             </Link>
           </Stack>
