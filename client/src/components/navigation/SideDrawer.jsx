@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight, Dashboard, ShowChart, SportsFootball } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
+import logo from '../../assets/logo.png';
 
 const tabs = [
     { text: "Dashboard", icon: <Dashboard /> },
@@ -45,7 +46,7 @@ const SideDrawer = ({ setPageTitle }) => {
             }}
         >
             <Box sx={{ px: 2.5, pt: 2, pb: 1, display: 'flex', justifyContent: 'center' }}>
-                {open && <img src="/src/assets/logo.png" alt="Logo" style={{ width: 80 }} />}
+                {open && <img src={logo} alt="Logo" style={{ width: 80 }} />}
             </Box>
             {/* Sidebar Items */}
             <List sx={{ position: 'absolute', top: 90, width: '100%' }}>

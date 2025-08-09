@@ -14,6 +14,8 @@ const MainLayout = ({ children }) => {
 
   // TODO : create Toast component that allows for multiple alerts, not just one
 
+  // TODO : also fix toast message. it looks a little off center due to the side drawer
+
   return (
     <Box sx={{
       display: 'flex',
