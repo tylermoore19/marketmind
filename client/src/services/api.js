@@ -59,8 +59,8 @@ export const api = {
     return api.post('/auth/register', { email, password });
   },
 
-  getRoot: async () => {
-    return api.get('/');
+  getTopStocks: async () => {
+    return api.get('/stocks/top');
   },
 };
 

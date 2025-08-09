@@ -1,8 +1,9 @@
-import { useState } from "react";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight, Dashboard, ShowChart, SportsFootball } from "@mui/icons-material";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import logo from '../../assets/logo.png';
 
 const tabs = [
@@ -16,17 +17,21 @@ const SideDrawer = ({ setPageTitle }) => {
     const [open, setOpen] = useState(true);
 
     const navigate = useNavigate();
+    const location = useLocation();
+
+    useEffect(() => {
+        const currentPath = location.pathname;
+        const activeTab = tabs.findIndex(tab => `/${tab.text.toLowerCase()}` === currentPath);
+        setSelectedTab(activeTab);
+        setPageTitle(tabs[activeTab]?.text || "");
+    }, [location.pathname]);
 
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
     const tabClick = (idx) => {
-        setSelectedTab(idx);
-        const pageTitle = tabs[idx].text;
-        setPageTitle(pageTitle);
-        const newLink = pageTitle.toLowerCase();
-        navigate(`/${newLink}`);
+        navigate(`/${tabs[idx].text.toLowerCase()}`);
     };
 
     return (

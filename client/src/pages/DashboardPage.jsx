@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { Toolbar, Tabs, Tab, Typography, Box } from "@mui/material";
-import { useApiCall } from '../hooks/useApiCall';
-import api from '../services/api';
 
 const DashboardPage = () => {
     const [value, setValue] = useState(0);
@@ -10,8 +8,6 @@ const DashboardPage = () => {
         setValue(newValue);
     };
 
-    const callRoot = useApiCall(api.getRoot);
-
     // const handleCallBackend = async () => {
     //     const data = await callRoot();
 
@@ -19,7 +15,7 @@ const DashboardPage = () => {
     // };
 
     return (
-        <Box sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}>
+        <Box>
             <Toolbar>
                 <Typography
                     variant="h6"

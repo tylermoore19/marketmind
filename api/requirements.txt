@@ -13,3 +13,6 @@ bcrypt==4.0.1
 
 # Database migrations
 Flask-Migrate==4.0.5
+
+# Gemini Api
+google-generativeai

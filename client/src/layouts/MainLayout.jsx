@@ -24,41 +24,42 @@ const MainLayout = ({ children }) => {
       width: '100vw',
       position: 'relative'
     }}>
-      <Box sx={{ position: 'fixed', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
-        <Fade in={!!alert} timeout={{ enter: 300, exit: 300 }} unmountOnExit>
-          <Alert
-            severity={alert?.severity}
-            sx={{ width: 'fit-content', minWidth: 600, maxWidth: 720, px: 3, py: 1.5, borderRadius: 2, boxShadow: 3, pointerEvents: 'auto', alignItems: 'center' }}
-            action={
-              <Box sx={{ ml: 2, display: 'flex', alignItems: 'center', height: 'auto', pb: '4px' }}>
-                <span
-                  style={{
-                    cursor: 'pointer',
-                    fontWeight: 700,
-                    fontSize: 20,
-                    color: '#888',
-                    lineHeight: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    height: '100%',
-                  }}
-                  onClick={hideAlert}
-                  aria-label="Close alert"
-                  role="button"
-                >
-                  ×
-                </span>
-              </Box>
-            }
-          >
-            {alert?.message}
-          </Alert>
-        </Fade>
-      </Box>
-
       <SideDrawer setPageTitle={setPageTitle} />
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative' }}>
+        {/* Toast */}
+        <Box sx={{ position: 'absolute', top: 24, left: 0, right: 0, zIndex: 1400, display: 'flex', justifyContent: 'center', pointerEvents: 'none' }}>
+          <Fade in={!!alert} timeout={{ enter: 300, exit: 300 }} unmountOnExit>
+            <Alert
+              severity={alert?.severity}
+              sx={{ width: 'fit-content', minWidth: 600, maxWidth: 720, px: 3, py: 1.5, borderRadius: 2, boxShadow: 3, pointerEvents: 'auto', alignItems: 'center' }}
+              action={
+                <Box sx={{ ml: 2, display: 'flex', alignItems: 'center', height: 'auto', pb: '4px' }}>
+                  <span
+                    style={{
+                      cursor: 'pointer',
+                      fontWeight: 700,
+                      fontSize: 20,
+                      color: '#888',
+                      lineHeight: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      height: '100%',
+                    }}
+                    onClick={hideAlert}
+                    aria-label="Close alert"
+                    role="button"
+                  >
+                    ×
+                  </span>
+                </Box>
+              }
+            >
+              {alert?.message}
+            </Alert>
+          </Fade>
+        </Box>
+
         <Navbar pageTitle={pageTitle} />
 
         <Container
@@ -70,9 +71,8 @@ const MainLayout = ({ children }) => {
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
-            px: { xs: 2, sm: 3, md: 4 },
-            minHeight: 'calc(100vh - 64px - 80px)', // 64px navbar, 80px footer
-            maxHeight: 'calc(100vh - 64px - 80px)',
+            p: { xs: 2, sm: 3, md: 4 },
+            height: 'calc(100vh - 64px)', // 64px navbar
             overflow: 'hidden',
           }}
         >
