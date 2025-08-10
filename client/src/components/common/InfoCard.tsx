@@ -26,7 +26,7 @@ const InfoCard = ({ title, loading, error, refetch, children }) => {
             </Backdrop>
 
             <CardContent>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h6" color="primary" align="left" gutterBottom>
                     {title}
                 </Typography>
                 {error && (

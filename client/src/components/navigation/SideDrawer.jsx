@@ -50,8 +50,8 @@ const SideDrawer = ({ setPageTitle }) => {
                 },
             }}
         >
-            <Box sx={{ px: 2.5, pt: 2, pb: 1, display: 'flex', justifyContent: 'center' }}>
-                {open && <img src={logo} alt="Logo" style={{ width: 80 }} />}
+            <Box sx={{ px: 2.5, py: 1.5, display: 'flex', justifyContent: 'center' }}>
+                <img src={logo} alt="Logo" style={{ width: open ? 80 : 40, transition: 'width 0.3s ease-in-out' }} />
             </Box>
             {/* Sidebar Items */}
             <List sx={{ position: 'absolute', top: 90, width: '100%' }}>

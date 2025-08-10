@@ -19,9 +19,12 @@ const Navbar = ({ pageTitle }) => {
         setAnchorEl(null);
     };
 
+    // TODO : need to add name display when logged in
+    // TODO : also, need to create new file that is meant for styling that can be used across app (not sure if I can use theme.js for that or not)
+
     return (
         <AppBar position='sticky' sx={{ left: 'auto', right: 'auto', width: '100%', bgcolor: 'background.paper', color: 'text.primary' }}>
-            <Toolbar>
+            <Toolbar sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
                 <Typography variant="h6" noWrap component="div">
                     {pageTitle}
                 </Typography>

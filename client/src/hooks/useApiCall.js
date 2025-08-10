@@ -22,6 +22,7 @@ export function useApiCall(apiFunc, skipInitial = false, args = [], deps = []) {
     const fetchData = useCallback(async (...args) => {
         setLoading(true);
         setError(null);
+        setData(null);
 
         try {
             // Expect apiFunc to return an object: { data, refreshToken }

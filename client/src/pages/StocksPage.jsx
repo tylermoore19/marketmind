@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import { useApiCall } from '../hooks/useApiCall';
 import api from '../services/api';
 import InfoCard from '../components/common/InfoCard';
