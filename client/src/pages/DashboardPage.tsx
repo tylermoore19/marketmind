@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Toolbar, Tabs, Tab, Typography, Box } from "@mui/material";
 
 const DashboardPage = () => {
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState<number>(0);
 
-    const handleChange = (event, newValue) => {
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 

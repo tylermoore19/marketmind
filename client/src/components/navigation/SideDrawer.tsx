@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
-import PropTypes from 'prop-types';
 import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, IconButton, Box } from "@mui/material";
 import { ChevronLeft, ChevronRight, Dashboard, ShowChart, SportsFootball } from "@mui/icons-material";
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -12,7 +11,11 @@ const tabs = [
     { text: "Sports", icon: <SportsFootball /> },
 ];
 
-const SideDrawer = ({ setPageTitle }) => {
+interface Props {
+    setPageTitle: (title: string) => void;
+}
+
+const SideDrawer = ({ setPageTitle }: Props) => {
     const [selectedTab, setSelectedTab] = useState(-1);
     const [open, setOpen] = useState(true);
 
@@ -30,7 +33,7 @@ const SideDrawer = ({ setPageTitle }) => {
         setOpen(!open);
     };
 
-    const tabClick = (idx) => {
+    const tabClick = (idx: number) => {
         navigate(`/${tabs[idx].text.toLowerCase()}`);
     };
 
@@ -64,7 +67,7 @@ const SideDrawer = ({ setPageTitle }) => {
                                 px: 1.5,
                                 py: 0,
                                 "&.Mui-selected": {
-                                    background: (theme) => theme.palette.gradients.orange,
+                                    background: (theme) => theme.palette.gradients?.orange,
                                 },
                                 "&:hover": {
                                     textDecoration: "underline",
@@ -123,10 +126,6 @@ const SideDrawer = ({ setPageTitle }) => {
             </Box>
         </Drawer>
     );
-};
-
-SideDrawer.propTypes = {
-    setPageTitle: PropTypes.func
 };
 
 export default SideDrawer;

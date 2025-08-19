@@ -2,15 +2,15 @@ from flask import Blueprint, request, jsonify
 from app import db
 from models import User
 from utils.validators import validate_email
-from utils.helpers import create_error_response
+from utils.helpers import error_response, ok_response
 
 auth_bp = Blueprint('auth', __name__)
 
 # Error responses
-INVALID_CREDENTIALS = create_error_response('Invalid email or password', 'invalid_credentials')
-MISSING_FIELDS = create_error_response('Missing required fields', 'missing_fields')
-INVALID_EMAIL = create_error_response('Invalid email format', 'invalid_email')
-EMAIL_EXISTS = create_error_response('Email already registered', 'email_exists')
+INVALID_CREDENTIALS = error_response('Invalid email or password', 'invalid_credentials')
+MISSING_FIELDS = error_response('Missing required fields', 'missing_fields')
+INVALID_EMAIL = error_response('Invalid email format', 'invalid_email')
+EMAIL_EXISTS = error_response('Email already registered', 'email_exists')
 
 @auth_bp.route('/register', methods=['POST'])
 def register():
@@ -37,13 +37,11 @@ def register():
         
         # Generate auth token
         token = user.generate_auth_token()
-        return jsonify({
-            'message': 'User registered successfully',
-            'token': token
-        }), 201
+        
+        return jsonify(ok_response({'token': token}, 'User registered successfully')), 201
     except Exception as e:
         db.session.rollback()
-        return jsonify(create_error_response('Registration failed', 'registration')), 500
+        return jsonify(error_response('Registration failed', 'registration')), 500
 
 @auth_bp.route('/login', methods=['POST'])
 def login():
@@ -59,14 +57,7 @@ def login():
     # Verify user exists and password is correct
     if user and user.verify_password(data['password']):
         token = user.generate_auth_token()
-        return jsonify({
-            'message': 'Login successful',
-            'token': token,
-            'user': {
-                'id': user.id,
-                'email': user.email
-            }
-        }), 200
+        return jsonify(ok_response({'token': token, 'user': {'id': user.id, 'email': user.email}}, 'Login successful')), 200
     
     # Always return 401 Unauthorized for invalid credentials
     return jsonify(INVALID_CREDENTIALS), 401

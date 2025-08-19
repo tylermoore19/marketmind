@@ -1,5 +1,5 @@
 from clients.GeminiClient import GeminiClient
-from utils.helpers import create_error_response
+from utils.helpers import error_response
 from flask import Flask, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -28,15 +28,15 @@ def create_app():
 
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_data):
-        return jsonify(create_error_response('Token has expired', 'token_expired')), 401
+        return jsonify(error_response('Token has expired', 'token_expired')), 401
 
     @jwt.invalid_token_loader
     def invalid_token_callback(error):
-        return jsonify(create_error_response('Invalid token', 'invalid_token')), 401
+        return jsonify(error_response('Invalid token', 'invalid_token')), 401
 
     @jwt.unauthorized_loader
     def missing_token_callback(error):
-        return jsonify(create_error_response('Authorization token is missing', 'authorization_required')), 401
+        return jsonify(error_response('Authorization token is missing', 'authorization_required')), 401
 
     # Database configuration
     app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('DATABASE_URL', 'sqlite:///marketmind.db')

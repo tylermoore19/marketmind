@@ -1,7 +1,12 @@
 import { Box } from "@mui/material";
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
-const FlexCenterLayout = ({ children, styles = {} }) => (
+interface Props {
+    children: ReactNode;
+    styles: React.CSSProperties;
+}
+
+const FlexCenterLayout = ({ children, styles = {} }: Props) => (
     <Box
         sx={{
             display: 'flex',
@@ -16,11 +21,5 @@ const FlexCenterLayout = ({ children, styles = {} }) => (
         {children}
     </Box>
 );
-
-
-FlexCenterLayout.propTypes = {
-    children: PropTypes.node,
-    styles: PropTypes.object,
-};
 
 export default FlexCenterLayout;

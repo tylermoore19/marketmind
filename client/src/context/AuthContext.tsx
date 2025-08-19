@@ -1,15 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { useAlert } from '../context/AlertContext';
-
-const AuthContext = createContext(null);
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { useAlert } from './AlertContext';
 
 const TOKEN_KEY = 'auth_token';
 
-export const AuthProvider = ({ children }) => {
-  const [token, setToken] = useState(() => localStorage.getItem(TOKEN_KEY));
-  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem(TOKEN_KEY));
+interface AuthContextType {
+  isAuthenticated: boolean;
+  token: string | null;
+  setToken: (token: string | null) => void;
+  login: (token: string) => void;
+  logout: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+interface Props {
+  children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: Props) => {
+  const [token, setToken] = useState<string | null>(() => localStorage.getItem(TOKEN_KEY));
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => !!localStorage.getItem(TOKEN_KEY));
 
   const { showAlert } = useAlert();
 
@@ -24,7 +35,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
-  const login = useCallback((newToken) => {
+  const login = useCallback((newToken: string) => {
     setToken(newToken);
   }, []);
 
@@ -37,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     if (!isAuthenticated) return;
 
     const checkInactivity = () => {
-      const lastActivity = parseInt(localStorage.getItem('last_api_activity'), 10);
+      const lastActivity = parseInt(localStorage.getItem("last_api_activity") || "0", 10);
       const now = Date.now();
       // 1 hour = 3600000 ms
       if (lastActivity && now - lastActivity > 3600000) {
@@ -51,24 +62,19 @@ export const AuthProvider = ({ children }) => {
     return () => clearInterval(interval);
   }, [isAuthenticated, logout]);
 
-  const value = {
+  const value: AuthContextType = {
     isAuthenticated,
     token,
     setToken,
     login,
-    logout,
-    setIsAuthenticated,
+    logout
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
 // Move useAuth to a separate file if you want to avoid the fast refresh warning, but for now, this is safe for most apps.
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');

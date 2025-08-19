@@ -1,7 +1,7 @@
 from clients.GeminiClient import GeminiClientError
 from flask import Blueprint, current_app, jsonify
 from flask_jwt_extended import jwt_required
-from utils.helpers import create_error_response
+from utils.helpers import error_response, ok_response
 from google import genai
 from datetime import date
 import time
@@ -21,10 +21,10 @@ def get_top_stocks():
         ]
 
         time.sleep(3)
-        return jsonify({'data': top_stocks}), 200
+        return jsonify(ok_response(top_stocks)), 200
         # raise Exception("Simulated error for testing")
     except Exception as e:
-        return jsonify(create_error_response('Failed to fetch top stocks', 'fetch_error')), 500
+        return jsonify(error_response('Failed to fetch top stocks', 'fetch_error')), 500
 
 @stocks_bp.route('/generate_content', methods=['GET'])
 @jwt_required()
@@ -34,11 +34,11 @@ def generate_content():
         response = client.get_top_sport_picks(date.today().strftime('%Y-%m-%d'))
         
         print('response', response)
-        
-        return jsonify({'data': response}), 200
+
+        return jsonify(ok_response(response)), 200
     except GeminiClientError as e:
         print(f'Gemini API error: {e}')
-        return jsonify(create_error_response('Failed to generate content', 'gemini_error')), 503
+        return jsonify(error_response('Failed to generate content', 'gemini_error')), 503
     except Exception as e:
         print(f'Unexpected error: {e}')
-        return jsonify(create_error_response('Internal server error', 'internal_error')), 500
+        return jsonify(error_response('Internal server error', 'internal_error')), 500

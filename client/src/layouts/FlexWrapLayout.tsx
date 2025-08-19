@@ -1,7 +1,12 @@
 import { Box } from "@mui/material";
-import PropTypes from 'prop-types';
+import { ReactNode } from 'react';
 
-const FlexWrapLayout = ({ children, styles = {} }) => (
+interface Props {
+    children: ReactNode;
+    styles?: React.CSSProperties;
+}
+
+const FlexWrapLayout = ({ children, styles = {} }: Props) => (
     <Box
         sx={{
             display: 'flex',
@@ -16,11 +21,5 @@ const FlexWrapLayout = ({ children, styles = {} }) => (
         {children}
     </Box>
 );
-
-
-FlexWrapLayout.propTypes = {
-    children: PropTypes.node,
-    styles: PropTypes.object,
-};
 
 export default FlexWrapLayout;

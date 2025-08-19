@@ -1,13 +1,16 @@
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { Box, Container, Fade } from "@mui/material";
 import { useAlert } from '../context/AlertContext';
 import { Alert } from '@mui/material';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../components/navigation/Footer';
-import PropTypes from 'prop-types';
 import SideDrawer from '../components/navigation/SideDrawer';
 
-const MainLayout = ({ children }) => {
+interface Props {
+  children: ReactNode;
+}
+
+const MainLayout = ({ children }: Props) => {
   const [pageTitle, setPageTitle] = useState("");
 
   const { alert, hideAlert } = useAlert();
@@ -83,10 +86,6 @@ const MainLayout = ({ children }) => {
       {/* <Footer /> */}
     </Box>
   );
-};
-
-MainLayout.propTypes = {
-  children: PropTypes.node,
 };
 
 export default MainLayout;

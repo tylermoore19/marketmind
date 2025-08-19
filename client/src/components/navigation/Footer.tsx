@@ -27,7 +27,7 @@ const Footer = () => {
             © {new Date().getFullYear()} Marketmind.
           </Typography>
           <Stack direction="row" spacing={3}>
-            <Link href="https://gh.io/gfb-copilot" alt="GitHub Copilot" target="_blank" underline="hover">
+            <Link href="https://gh.io/gfb-copilot" target="_blank" underline="hover">
               Built with GitHub Copilot 🤖
             </Link>
           </Stack>

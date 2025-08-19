@@ -7,12 +7,21 @@ import api from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
 import { useApiCall } from '../hooks/useApiCall';
+import { SignupResponse } from '@/types';
 
-const LoginPage = () => {
+interface Errors {
+    email?: string;
+    password?: string;
+    confirmPassword?: string;
+}
+
+const SignupPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({});
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [errors, setErrors] = useState<Errors>({});
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { login } = useAuth();
     const { showAlert } = useAlert();
 
@@ -20,10 +29,10 @@ const LoginPage = () => {
     const location = useLocation();
     const from = location.state?.from?.pathname || '/dashboard';
 
-    const { data, loading, error, fetch } = useApiCall(api.login, true);
+    const { data, loading, error, fetch } = useApiCall<SignupResponse>(api.register, true);
 
     const validate = () => {
-        const newErrors = {};
+        const newErrors: Errors = {};
         if (!email) {
             newErrors.email = 'Email is required';
         } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -34,6 +43,11 @@ const LoginPage = () => {
         } else if (password.length < 6) {
             newErrors.password = 'Password must be at least 6 characters';
         }
+        if (!confirmPassword) {
+            newErrors.confirmPassword = 'Please confirm your password';
+        } else if (password !== confirmPassword) {
+            newErrors.confirmPassword = 'Passwords do not match';
+        }
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
@@ -41,12 +55,12 @@ const LoginPage = () => {
     useEffect(() => {
         if (data?.token) {
             login(data.token); // Save token in context
-            showAlert('Login successful', 'success');
+            showAlert('Sign up successful', 'success');
             navigate(from, { replace: true }); // redirect on success
         }
     }, [data]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         if (validate()) {
@@ -54,7 +68,6 @@ const LoginPage = () => {
         }
     };
 
-    // TODO : maybe think about using the InfoCard for the login form to keep design consistent
     return (
         <Box
             component="form"
@@ -80,7 +93,7 @@ const LoginPage = () => {
         >
             <Box sx={{ mb: 1 }}>
                 <Box component="h2" sx={{ textAlign: 'center', fontWeight: 600, fontSize: 24, mb: 1 }}>
-                    Login to Your Account
+                    Create an Account
                 </Box>
             </Box>
             {error && (
@@ -111,7 +124,7 @@ const LoginPage = () => {
                 helperText={errors.password}
                 fullWidth
                 margin="dense"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 InputProps={{
                     endAdornment: (
                         <InputAdornment position="end">
@@ -126,14 +139,39 @@ const LoginPage = () => {
                     ),
                 }}
             />
+            <TextField
+                id="confirmPassword"
+                label="Confirm Password"
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                error={!!errors.confirmPassword}
+                helperText={errors.confirmPassword}
+                fullWidth
+                margin="dense"
+                autoComplete="new-password"
+                InputProps={{
+                    endAdornment: (
+                        <InputAdornment position="end">
+                            <IconButton
+                                aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                                onClick={() => setShowConfirmPassword((show) => !show)}
+                                edge="end"
+                            >
+                                {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                            </IconButton>
+                        </InputAdornment>
+                    ),
+                }}
+            />
             <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 1 }} disabled={loading}>
-                {loading ? 'Logging in...' : 'Login'}
+                {loading ? 'Signing up...' : 'Sign Up'}
             </Button>
             <Box sx={{ mt: 1, textAlign: 'center' }}>
                 <Typography variant="body2">
-                    Don&apos;t have an account?{' '}
-                    <Button variant="text" size="small" onClick={() => navigate('/signup')} sx={{ textTransform: 'none', p: 0, minWidth: 0 }}>
-                        Sign up
+                    Already have an account?{' '}
+                    <Button variant="text" size="small" onClick={() => navigate('/login')} sx={{ textTransform: 'none', p: 0, minWidth: 0 }}>
+                        Log in
                     </Button>
                 </Typography>
             </Box>
@@ -141,4 +179,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default SignupPage;

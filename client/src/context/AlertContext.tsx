@@ -1,13 +1,29 @@
-import { createContext, useContext, useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
+import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
 
-const AlertContext = createContext();
+type AlertSeverity = 'success' | 'error' | 'info' | 'warning';
 
-export const AlertProvider = ({ children }) => {
-    const [alert, setAlert] = useState(null);
+interface Alert {
+    message: string;
+    severity: AlertSeverity;
+}
+
+interface AlertContextType {
+    alert: Alert | null;
+    showAlert: (message: string, severity?: AlertSeverity) => void;
+    hideAlert: () => void;
+}
+
+const AlertContext = createContext<AlertContextType | undefined>(undefined);
+
+interface Props {
+    children: ReactNode;
+}
+
+export const AlertProvider = ({ children }: Props) => {
+    const [alert, setAlert] = useState<Alert | null>(null);
 
     // Show alert with message and severity ('success', 'error', etc.)
-    const showAlert = useCallback((message, severity = 'info') => {
+    const showAlert = useCallback((message: string, severity: AlertSeverity = 'info') => {
         setAlert({ message, severity });
         // Optionally auto-hide after a few seconds:
         const timeoutInterval = severity !== 'error' ? 4000 : 9000;
@@ -22,10 +38,6 @@ export const AlertProvider = ({ children }) => {
             {children}
         </AlertContext.Provider>
     );
-};
-
-AlertProvider.propTypes = {
-    children: PropTypes.node.isRequired,
 };
 
 export const useAlert = () => {

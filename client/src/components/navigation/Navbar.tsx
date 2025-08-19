@@ -1,17 +1,20 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Typography, Menu, MenuItem, IconButton, Box } from '@mui/material';
 import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
-const Navbar = ({ pageTitle }) => {
-    const [anchorEl, setAnchorEl] = useState(null);
+interface Props {
+    pageTitle: string;
+}
+
+const Navbar = ({ pageTitle }: Props) => {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
     const navigate = useNavigate();
     const { isAuthenticated, logout } = useAuth();
 
-    const handleMenuOpen = (event) => {
+    const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
 
@@ -86,10 +89,6 @@ const Navbar = ({ pageTitle }) => {
             </Toolbar>
         </AppBar>
     );
-};
-
-Navbar.propTypes = {
-    pageTitle: PropTypes.string,
 };
 
 export default Navbar;

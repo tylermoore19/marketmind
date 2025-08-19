@@ -2,36 +2,50 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from '../context/AuthContext';
 import { useAlert } from '../context/AlertContext';
+import { ApiResponse } from '@/types';
 
 // Custom error for token expiration/invalid
 export class TokenExpiredError extends Error {
-    constructor(message) {
+    constructor(message: string) {
         super(message);
         this.name = 'TokenExpiredError';
     }
 }
 
-export function useApiCall(apiFunc, skipInitial = false, args = [], deps = []) {
-    const [data, setData] = useState(null);
+interface ApiCallState<T> {
+    data: T | null;
+    loading: boolean;
+    message: string | null;
+    error: string | null;
+    fetch: (...args: any[]) => Promise<void>;
+}
+
+export function useApiCall<T>(apiFunc: (...args: any[]) => Promise<ApiResponse>, skipInitial = false, args = [], deps = []): ApiCallState<T> {
+    const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+    const [error, setError] = useState<string | null>(null);
+    const [message, setMessage] = useState<string | null>(null);
 
     const { logout, setToken } = useAuth();
     const { showAlert } = useAlert();
 
-    const fetchData = useCallback(async (...args) => {
+    const fetchData = useCallback(async (...args: any[]) => {
         setLoading(true);
         setError(null);
         setData(null);
 
         try {
             // Expect apiFunc to return an object: { data, refreshToken }
-            const result = await apiFunc(...args);
-            if (result && result.refreshToken) {
+            const result: ApiResponse = await apiFunc(...args);
+            if (result?.refreshToken) {
                 setToken(result.refreshToken);
             }
-            setData(result && result.data !== undefined ? result.data : result);
-        } catch (err) {
+            if (result?.message) {
+                setMessage(result.message);
+            }
+
+            setData(result?.data as T);
+        } catch (err: any) {
             // if it's an authentication issue, log out the user. otherwise, rethrow the error and let the individual component handle it
             if (
                 err instanceof TokenExpiredError ||
@@ -59,5 +73,5 @@ export function useApiCall(apiFunc, skipInitial = false, args = [], deps = []) {
         }
     }, [fetchData, skipInitial, ...args]);
 
-    return { data, loading, error, fetch: fetchData };
+    return { data, loading, message, error, fetch: fetchData };
 }
