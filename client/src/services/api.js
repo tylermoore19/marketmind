@@ -64,7 +64,7 @@ export const api = {
   },
 
   getTestingStocks: async () => {
-    return api.get('/stocks/testing');
+    return api.get('/stocks/generate_content');
   },
 };
 

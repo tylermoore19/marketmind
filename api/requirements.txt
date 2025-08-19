@@ -15,4 +15,5 @@ bcrypt==4.0.1
 Flask-Migrate==4.0.5
 
 # Gemini Api
-google-generativeai
+# google-generativeai
+google-genai

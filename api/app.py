@@ -1,3 +1,4 @@
+from clients.GeminiClient import GeminiClient
 from utils.helpers import create_error_response
 from flask import Flask, jsonify
 from flask_cors import CORS
@@ -17,7 +18,10 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     
-    # JWT Configuration
+    # Gemini configuration
+    app.config['GEMINI_CLIENT'] = GeminiClient()
+    
+    # JWT configuration
     app.config['JWT_SECRET_KEY'] = environ.get('JWT_SECRET_KEY', 'your-secret-key')
     app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=1)
     jwt = JWTManager(app)
