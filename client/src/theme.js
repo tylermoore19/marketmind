@@ -63,6 +63,9 @@ const theme = createTheme({
   shape: {
     borderRadius: 8,
   },
+  appSpecific: {
+    padding: { lg: 2, xl: 3 }
+  }
 });
 
 export default theme;

@@ -10,6 +10,7 @@ Use your browsing feature to actively fetch **real-time game data** and **bettin
 1. **Visit ESPN.com first** to get today’s game schedules for:
    - MLB
    - NFL
+   - NCAA Football
    - NBA
    - NHL
 
@@ -61,12 +62,21 @@ For each candidate game or prop, evaluate:
 
 ---
 
-## Step 4 – Select 5 Best Bets and Allocate Units
+## Step 4 – Run 3 Independent Analyses
+
+1. Run the **entire process (Steps 1–3)** **three separate times**.  
+   - Each run should independently analyze today’s slate and identify its **top straight bets** and **potential parlays**.  
+
+2. After 3 runs, **compare results across all runs**:
+   - Track which bets appeared most consistently.  
+   - Give priority to bets that appeared in **2 or more runs**.  
+   - If no consensus appears, use **highest confidence + strongest supporting data** as tiebreakers.    
+
+---
+
+## Step 5 – Select 5 Best Bets and Allocate Units
 
 1. Choose **exactly 5 bets** with the highest value.
-   - Pick **3 traditional bets** (ML, spread, O/U)
-   - Pick **2 player props**
-
 2. **Distribute ≤ 10 units total, proportional to confidence**:
    - Assign a **confidence label** to each bet: `High`, `Medium` (optionally `Low`).
    - Convert labels to weights: **High = 5**, **Medium = 3**, **Low = 1**.  
@@ -79,7 +89,7 @@ For each candidate game or prop, evaluate:
 
 ---
 
-## Step 5 – Output JSON Only
+## Step 6 – Output JSON Only
 
 Return the final result **only** in JSON array format, with each object containing:
 

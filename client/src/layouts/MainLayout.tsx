@@ -73,8 +73,8 @@ const MainLayout = ({ children }: Props) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            gap: { xs: 2, sm: 3, md: 4 },
-            p: { xs: 2, sm: 3, md: 4 },
+            gap: (theme) => theme.appSpecific.padding,
+            p: (theme) => theme.appSpecific.padding,
             height: 'calc(100vh - 64px)', // 64px navbar
             width: '100%',
             overflow: 'auto',

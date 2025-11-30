@@ -17,3 +17,12 @@ Flask-Migrate==4.0.5
 # Gemini Api
 # google-generativeai
 google-genai
+
+# tradingview
+tradingview-screener
+
+# yfinance
+yfinance
+
+# indicators
+pandas-ta

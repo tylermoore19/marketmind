@@ -18,11 +18,13 @@ def ok_response(data, message = None):
         
     return response
 
-def extract_json_array(text: str):
-    """Regex: find 'json' then capture everything between the first [ and its matching ]"""
-    match = re.search(r'json\s*(\[\s*{.*}\s*\])', text, re.DOTALL)
-    if not match:
-        raise ValueError("No JSON array found in text.")
-    
-    json_str = match.group(1)
-    return json.loads(json_str)
+def extract_json_array(text):
+    # Find the first JSON array in the text (even if surrounded by markdown)
+    match = re.search(r'\[.*?\]', text, re.DOTALL)
+    if match:
+        json_str = match.group(0)
+        try:
+            return json.loads(json_str)
+        except Exception as e:
+            raise ValueError(f"Found array but failed to parse JSON: {e}")
+    raise ValueError("No JSON array found in text")

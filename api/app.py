@@ -8,6 +8,18 @@ from os import environ
 from dotenv import load_dotenv
 from datetime import timedelta
 from config import Config
+from middleware.request_logging import register_request_logging
+import logging
+
+# shared application logger for other modules to import
+logger = logging.getLogger('marketmind')
+if not logger.handlers:
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.INFO)
+    fmt = logging.Formatter('%(asctime)s %(levelname)s %(name)s - %(message)s')
+    ch.setFormatter(fmt)
+    logger.addHandler(ch)
+    logger.setLevel(logging.INFO)
 
 # Load environment variables
 load_dotenv()
@@ -49,9 +61,18 @@ def create_app():
     from routes.auth import auth_bp
     from routes.trips import trips_bp
     from routes.stocks import stocks_bp
+    from routes.sports import sports_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(trips_bp, url_prefix='/api')
     app.register_blueprint(stocks_bp, url_prefix='/stocks')
+    app.register_blueprint(sports_bp, url_prefix='/sports')
+    
+    # pass the shared module logger into middleware to avoid circular imports
+    try:
+        register_request_logging(app, logger=logger)
+    except Exception:
+        # fallback: register without injected logger
+        register_request_logging(app)
 
     # Register routes
     @app.route('/')

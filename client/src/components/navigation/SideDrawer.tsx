@@ -43,7 +43,7 @@ const SideDrawer = ({ setPageTitle }: Props) => {
             open={open}
             sx={{
                 position: 'relative',
-                width: open ? 240 : 65,
+                width: open ? 220 : 65,
                 transition: "width 0.3s",
                 "& .MuiDrawer-paper": {
                     width: 'inherit',
@@ -54,12 +54,12 @@ const SideDrawer = ({ setPageTitle }: Props) => {
             }}
         >
             <Box sx={{ px: 2.5, py: 1.5, display: 'flex', justifyContent: 'center' }}>
-                <img src={logo} alt="Logo" style={{ width: open ? 80 : 40, transition: 'width 0.3s ease-in-out' }} />
+                <img src={logo} alt="Logo" style={{ width: open ? 70 : 40, transition: 'width 0.3s ease-in-out' }} />
             </Box>
             {/* Sidebar Items */}
             <List sx={{ position: 'absolute', top: 90, width: '100%' }}>
                 {tabs.map((item, index) => (
-                    <ListItem key={item.text} sx={{ p: 1 }}>
+                    <ListItem key={item.text} sx={{ px: 1 }}>
                         <ListItemButton
                             sx={{
                                 minHeight: 44,

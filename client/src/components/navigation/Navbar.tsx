@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { AppBar, Toolbar, Typography, Menu, MenuItem, IconButton, Box } from '@mui/material';
+import { AppBar, Toolbar, Typography, Menu, MenuItem, IconButton, Box, useTheme } from '@mui/material';
 import { AccountCircle } from "@mui/icons-material";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -27,7 +27,7 @@ const Navbar = ({ pageTitle }: Props) => {
 
     return (
         <AppBar position='sticky' sx={{ left: 'auto', right: 'auto', width: '100%', bgcolor: 'background.paper', color: 'text.primary' }}>
-            <Toolbar sx={{ px: { xs: 2, sm: 3, md: 4 } }}>
+            <Toolbar sx={{ px: (theme) => theme.appSpecific.padding, minHeight: { lg: '50px', xl: '60px' } }}>
                 <Typography variant="h6" noWrap component="div">
                     {pageTitle}
                 </Typography>
