@@ -14,4 +14,21 @@ declare module '@mui/material/styles' {
             // add other gradient properties you use
         };
     }
+
+    interface Theme {
+        appSpecific: {
+            padding: {
+                lg: number;
+                xlg: number;
+            };
+        };
+    }
+    interface ThemeOptions {
+        appSpecific?: {
+            padding?: {
+                lg?: number;
+                xlg?: number;
+            };
+        };
+    }
 }

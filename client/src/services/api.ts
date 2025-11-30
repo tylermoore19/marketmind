@@ -75,8 +75,12 @@ export const api = {
     return api.get('/stocks/top');
   },
 
-  getTestingStocks: async (): Promise<ApiResponse<any>> => {
-    return api.get('/stocks/generate_content');
+  getBullishStocks: async (): Promise<ApiResponse<any>> => {
+    return api.get('/stocks/bullish');
+  },
+
+  getSportsPredictions: async (): Promise<ApiResponse<any>> => {
+    return api.get('/sports/predictions');
   },
 };
 

@@ -3,6 +3,7 @@ import LoginPage from '../pages/LoginPage';
 import SignUpPage from '../pages/SignUpPage';
 import DashboardPage from '../pages/DashboardPage';
 import StocksPage from '../pages/StocksPage';
+import SportsPage from '../pages/SportsPage';
 
 export const publicRoutes = [
   {
@@ -30,7 +31,7 @@ export const protectedRoutes = [
   },
   {
     path: '/sports',
-    element: <div>Sports Page</div>,
+    element: <SportsPage />,
   },
   {
     path: '/trips',
