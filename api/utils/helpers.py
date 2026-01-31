@@ -19,12 +19,21 @@ def ok_response(data, message = None):
     return response
 
 def extract_json_array(text):
-    # Find the first JSON array in the text (even if surrounded by markdown)
-    match = re.search(r'\[.*?\]', text, re.DOTALL)
-    if match:
-        json_str = match.group(0)
+    """
+    Extract a JSON object or array from a text blob.
+
+    Behavior:
+    - If a fenced ```json block exists, return the parsed JSON inside it.
+
+    Returns the parsed Python object (dict or list).
+    """
+    # Try to find a fenced ```json block first
+    fenced_match = re.search(r'```json\s*(\{[\s\S]*?\}|\[[\s\S]*?\])\s*```', text, re.IGNORECASE)
+    if fenced_match:
+        json_str = fenced_match.group(1)
         try:
             return json.loads(json_str)
         except Exception as e:
-            raise ValueError(f"Found array but failed to parse JSON: {e}")
-    raise ValueError("No JSON array found in text")
+            raise ValueError(f"Found fenced JSON but failed to parse: {e}")
+
+    raise ValueError("Reached end of text while searching for end of JSON object/array")

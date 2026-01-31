@@ -5,15 +5,12 @@ import FlexWrapLayout from '../layouts/FlexWrapLayout';
 import GridLayoutTesting from '../layouts/GridLayout';
 
 const SportsPage = () => {
-    const sportsPredictionCard = useApiCall(api.getSportsPredictions);
+    // const sportsPredictionCard = useApiCall(api.getSportsPredictions);
+    const sportsParlayCard = useApiCall(api.getSportsParlay);
 
     return (
         <FlexWrapLayout>
-            {/* <InfoCard title="Sports Predictions" loading={sportsPredictionCard.loading} error={sportsPredictionCard.error} refetch={sportsPredictionCard.fetch}>
-                {sportsPredictionCard.data ? <pre>{JSON.stringify(sportsPredictionCard.data, null, 2)}</pre> : null}
-            </InfoCard> */}
-
-            <InfoCard
+            {/* <InfoCard
                 title="Sports Predictions"
                 loading={sportsPredictionCard.loading}
                 error={sportsPredictionCard.error}
@@ -21,6 +18,15 @@ const SportsPage = () => {
                 data={sportsPredictionCard.data}
                 dataHeaderKey={'bet'}
                 dataRightKey={'unitSize'}
+            /> */}
+            <InfoCard
+                title="Sports Parlay"
+                loading={sportsParlayCard.loading}
+                error={sportsParlayCard.error}
+                refetch={sportsParlayCard.fetch}
+                data={(sportsParlayCard.data as { parlay?: { legs?: any[] } })?.parlay?.legs ?? []}
+                dataHeaderKey={'bet'}
+                dataRightKey={'estimatedProbability'}
             />
         </FlexWrapLayout>
         // <GridLayoutTesting />

@@ -24,3 +24,21 @@ def get_sport_predictions():
     except Exception as e:
         print(f'Unexpected error: {e}')
         return jsonify(error_response('Internal server error', 'internal_error')), 500
+    
+@sports_bp.route('/parlay', methods=['GET'])
+@jwt_required()
+def get_sport_parlay():
+    try:
+        client = current_app.config['GEMINI_CLIENT']
+        response = client.get_sport_parlay(date.today().strftime('%Y-%m-%d'))
+        # response = client.get_sport_parlay('2025-08-24')
+        
+        print('response', response)
+
+        return jsonify(ok_response(response)), 200
+    except GeminiClientError as e:
+        print(f'Gemini API error: {e}')
+        return jsonify(error_response('Failed to generate content', 'gemini_error')), 503
+    except Exception as e:
+        print(f'Unexpected error: {e}')
+        return jsonify(error_response('Internal server error', 'internal_error')), 500

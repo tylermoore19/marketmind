@@ -6,8 +6,8 @@ import FlexWrapLayout from '../layouts/FlexWrapLayout';
 import GridLayoutTesting from '../layouts/GridLayout';
 
 const StocksPage = () => {
-    const topStocksCard = useApiCall(api.getTopStocks);
     const bullishStocksCard = useApiCall(api.getBullishStocks);
+    // const bearishStocksCard = useApiCall(api.getBearishStocks);
 
     const theme = useTheme();
 
@@ -18,12 +18,15 @@ const StocksPage = () => {
         }))
         : null;
 
+    // const bearishData = Array.isArray(bearishStocksCard.data)
+    //     ? bearishStocksCard.data.map((it: any) => ({
+    //         ...it,
+    //         _rightColor: (it?.buy_signal === 'Sell') ? theme.palette.success.main : theme.palette.error.main
+    //     }))
+    //     : null;
+
     return (
         <FlexWrapLayout>
-            {/* <InfoCard title="Top Stocks" loading={topStocksCard.loading} error={topStocksCard.error} refetch={topStocksCard.fetch}>
-                {topStocksCard.data ? <pre>{JSON.stringify(topStocksCard.data, null, 2)}</pre> : null}
-            </InfoCard> */}
-
             <InfoCard
                 title="Bullish Stocks"
                 loading={bullishStocksCard.loading}
@@ -33,6 +36,16 @@ const StocksPage = () => {
                 dataHeaderKey={'ticker'}
                 dataRightKey={'buy_signal'}
             />
+            {/* 
+            <InfoCard
+                title="Bearish Stocks"
+                loading={bearishStocksCard.loading}
+                error={bearishStocksCard.error}
+                refetch={bearishStocksCard.fetch}
+                data={bearishData}
+                dataHeaderKey={'ticker'}
+                dataRightKey={'buy_signal'}
+            /> */}
         </FlexWrapLayout>
         // <GridLayoutTesting />
     )

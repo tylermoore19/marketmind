@@ -1,6 +1,6 @@
 import { ApiResponse, ErrorResponse, LoginResponse, SignupResponse } from '@/types';
 
-const BASE_URL = 'http://127.0.0.1:5000';
+const BASE_URL = 'http://127.0.0.1:5050';
 
 interface ApiError extends Error {
   code: string;
@@ -79,8 +79,16 @@ export const api = {
     return api.get('/stocks/bullish');
   },
 
+  getBearishStocks: async (): Promise<ApiResponse<any>> => {
+    return api.get('/stocks/bearish');
+  },
+
   getSportsPredictions: async (): Promise<ApiResponse<any>> => {
     return api.get('/sports/predictions');
+  },
+
+  getSportsParlay: async (): Promise<ApiResponse<any>> => {
+    return api.get('/sports/parlay');
   },
 };
 
